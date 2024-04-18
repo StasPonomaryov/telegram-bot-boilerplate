@@ -14,7 +14,7 @@
     "test:u": "jest ./src/__tests__/unit --detectOpenHandles"
   },
   "engines": {
-    "node": "18"
+    "node": "20"
   },
   "main": "lib/index.js",
   "dependencies": {
