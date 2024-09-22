@@ -8,7 +8,11 @@
 - Put the file to `src` folder
 - Create `.env` file in `functions` folder and put there  
 `FIREBASE_REALTIME_DB_URL="<URL_COPIED EARLIER>"`
-- Generate your file with private key: in Firebase console go to Project overview -> Project settings -> Add app (Web app). Then in Service account tab click on Generate new private key. Download file to your `src` folder and add it to `.gitignore` file.
+- Generate your file with private key: in Firebase console go to Project overview -> Project settings -> Add app (Web app). Then in Service account tab click on Generate new private key. Download file to your `src` folder and add it to `.gitignore` file
+- Enable IAM API `https://console.cloud.google.com/apis/library/iam.googleapis.com?project=<YOUR_PROJECT_ID>`
+- Enable Artifact registry API `https://console.cloud.google.com/apis/library/artifactregistry.googleapis.com?project=<YOUR_PROJECT_ID>`
+- Enable Cloud Build API `https://console.cloud.google.com/apis/api/cloudbuild.googleapis.com/metrics?project=<YOUR_PROJECT_ID>`
+- Enable Cloud Functions API `https://console.cloud.google.com/apis/api/cloudfunctions.googleapis.com/metrics?project=<YOUR_PROJECT_ID>`
 
 ### src\local.ts
 Create file `src\local.ts` like this:
