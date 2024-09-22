@@ -29,7 +29,13 @@ jobs:
     - name: Install npm packages
       run: |
         cd functions
-        npm install --force
+        if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+          npm ci
+          else
+          npm i
+          fi
         npm run build
     # We must choose a project
     - name:  Set project DEV
