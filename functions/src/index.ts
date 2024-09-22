@@ -1,31 +1,35 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import * as Sentry from '@sentry/serverless';
-import * as functions from 'firebase-functions';
+import * as Sentry from '@sentry/google-cloud-serverless';
+import { onRequest, Request } from 'firebase-functions/v2/https';
+import { setGlobalOptions } from 'firebase-functions/v2';
 import botWebhookHandler from './handlers/botWebhook';
 
-const keys = functions.config();
+const sentryDsn = process.env.SENTRY_DSN;
+const sentryEnv = process.env.SENTRY_ENV;
+
+setGlobalOptions({ region: 'europe-central2' });
 /**
  * Init Sentry
  */
-Sentry.GCPFunction.init({
-  dsn: keys.sentry.dsn,
+Sentry.init({
+  dsn: sentryDsn,
   enabled: true,
-  environment: keys.sentry.environment,
+  environment: sentryEnv,
   tracesSampleRate: 1.0,
 });
 
-const botWebhook = functions
-  .region('europe-west2')
-  .https
-  .onRequest(
-    Sentry.GCPFunction.wrapHttpFunction(async (req, res) => {
-      try {
-        botWebhookHandler(req as functions.https.Request, res);
-      } catch (err) {
-        Sentry.captureException(err);
-        res.status(500).send(`Internal error: ${(err as Error).message}`);
-      }
-    }),
-  );
+export const botWebhook = onRequest(
+  {
+    region: 'europe-west1', // More closer to Telegram servers
+  },
+  Sentry.wrapHttpFunction(async (req, res) => {
+    try {
+      botWebhookHandler(req as Request, res);
+    } catch (err) {
+      Sentry.captureException(err);
+      res.status(500).send(`Internal error: ${(err as Error).message}`);
+    }
+  }),
+);
 
 export default botWebhook;
