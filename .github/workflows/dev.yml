@@ -1,54 +1,25 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI_for_Dev
-
-# Controls when the workflow will run
+name: Deploy the dev branch
 on:
-  workflow_dispatch:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ dev ]
-  pull_request:
-    branches: [ dev ]
-
-  # Allows you to run this workflow manually from the Actions tab
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    branches:
+      - dev
+env:
+  REALTIME_DB_URL: ${{ secrets.REALTIME_DB_URL }}
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  build_and_deploy:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v3
-
-    # Runs a single command using the runners shell
-    # And of course we need to goto our functions folder to deploy
-    - name: Install npm packages
-      run: |
-        cd functions
-        if [ -e yarn.lock ]; then
-          yarn install --frozen-lockfile
-          elif [ -e package-lock.json ]; then
-          npm ci
-          else
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install npm packages
+        run: |
+          cd functions
           npm i
-          fi
-        npm run build
-    # We must choose a project
-    - name:  Set project DEV
-      run: npx firebase-tools use telegram-bot-boilerplate
-      env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-    # Run test coverage
-    - name: Run tests
-      run: |
-          cd ./functions
-          npm run test:c          
-    # Deploying the functions to firebase
-    - name:  Deploy to Firebase
-      run: npx firebase-tools deploy --only functions
-      env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          npm run build
+      - run: npm install -g firebase-tools 
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}'
+      - run: firebase deploy --only functions --debug -P dev

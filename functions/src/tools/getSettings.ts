@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // import * as admin from 'firebase-admin';
 import type { Firestore } from 'firebase-admin/firestore';
+import 'dotenv/config';
 import { isLocal } from '../utils';
 import CloudDb from '../db/cloudDb';
 import * as fromFile from '../config/settings.json';
 import { BotSettings } from '../types';
-
-require('dotenv').config();
 
 export default (db: Firestore) => ({
   /**

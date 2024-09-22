@@ -19,6 +19,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@sentry/google-cloud-serverless": "^8.30.0",
+    "dotenv": "^16.4.5",
     "firebase-admin": "^11.11.1",
     "firebase-functions": "^4.9.0",
     "i18next": "^23.15.1",
@@ -33,7 +34,6 @@
     "@types/lodash": "^4.17.7",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "dotenv": "^16.4.5",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-google": "^0.14.0",
