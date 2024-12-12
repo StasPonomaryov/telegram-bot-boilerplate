@@ -1,14 +1,21 @@
-import * as functions from 'firebase-functions';
+import { Request, Response } from 'express';
 import { cloudFirestore } from '../database';
 import getSettings from '../tools/getSettings';
 import { BotMainConfig } from '../types';
 import Bot from '../bot';
 
-const keys = functions.config();
+const keys = {
+  bot: {
+    token: process.env.BOT_TOKEN,
+  },
+  ga: {
+    tid: process.env.GOOGLE_ANALYTICS,
+  },
+};
 
 const botWebhookHandler = async (
-  request: functions.https.Request,
-  response: functions.Response<unknown>,
+  request: Request,
+  response: Response,
 ) => {
   const database = cloudFirestore;
   const settings = await getSettings(database).getFromDB();

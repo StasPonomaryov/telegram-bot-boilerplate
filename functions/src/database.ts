@@ -7,6 +7,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const firebaseApp = initializeApp({
+  projectId: process.env.PROJECT_ID,
   databaseURL: process.env.FIREBASE_REALTIME_DB_URL,
 });
 // Realtime database for sessions
