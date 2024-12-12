@@ -12,6 +12,14 @@ const keys = {
     tid: process.env.GOOGLE_ANALYTICS,
   },
 };
+const keys = {
+  bot: {
+    token: process.env.BOT_TOKEN,
+  },
+  ga: {
+    tid: process.env.GOOGLE_ANALYTICS,
+  },
+};
 
 const botWebhookHandler = async (
   request: Request,
